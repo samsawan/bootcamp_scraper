@@ -37,10 +37,10 @@ if __name__ == '__main__':
     time.sleep(1)
     assignment_table = browser.find_element_by_class_name('bcs-table')
     assignment_entries = assignment_table.find_elements(By.XPATH, '//tbody/tr')
-    # todo assignment should be a class
     assignment_title_regex = re.compile(f"{args.assignment}:")
     valid_assignments = []
     for assignment in assignment_entries:
         assignment_title = assignment.find_element(By.XPATH, 'td[1]')
         if assignment_title_regex.match(assignment_title.text):
+            print(assignment.find_element(By.XPATH, 'td[3]').text)
             valid_assignments.append(assignment)
