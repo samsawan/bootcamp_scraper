@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 import argparse
 import time
 import re
+import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument('driver', help='the absolute location to the Chrome driver')
@@ -39,8 +40,10 @@ if __name__ == '__main__':
     assignment_entries = assignment_table.find_elements(By.XPATH, '//tbody/tr')
     assignment_title_regex = re.compile(f"{args.assignment}:")
     valid_assignments = []
+    with open('./config/config.json') as f:
+        json_data = json.load(f)
     for assignment in assignment_entries:
         assignment_title = assignment.find_element(By.XPATH, 'td[1]')
-        if assignment_title_regex.match(assignment_title.text):
-            print(assignment.find_element(By.XPATH, 'td[3]').text)
+        assignment_author = assignment.find_element(By.XPATH, 'td[3]').text
+        if assignment_title_regex.match(assignment_title.text) and assignment_author in json_data['student_list']:
             valid_assignments.append(assignment)
